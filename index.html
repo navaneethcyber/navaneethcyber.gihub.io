@@ -1,201 +1,340 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Birthday Celebration</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-      background: black;
-      font-family: 'Dancing Script', cursive;
-      color: white;
-    }
+<meta charset="UTF-8">
+<title>Merry Christmas</title>
 
-    #startBtn {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      padding: 20px 40px;
-      font-size: 24px;
-      cursor: pointer;
-      border: none;
-      border-radius: 15px;
-      background: linear-gradient(135deg, #ff6ec4, #7873f5);
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      box-shadow: 0 0 20px rgba(255,255,255,0.7);
-      z-index: 10;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
 
-    canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-    }
+body{
+    font-family:'Poppins',sans-serif;
+    background:radial-gradient(circle at top,#2e3f33,#080b09);
+    color:#fff;
+    overflow:hidden;
+    height:100vh;
+}
 
-    .message {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 28px;
-      max-width: 40%;
-      opacity: 0;
-      transition: opacity 2s ease;
-      line-height: 1.4;
-    }
+/* Vignette */
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle,transparent 45%,rgba(0,0,0,.75));
+    pointer-events:none;
+}
 
-    .left { left: 10%; text-align: left; }
-    .right { right: 10%; text-align: right; }
+/* Frame */
+.frame{
+    position:fixed;
+    inset:20px;
+    border:1px solid rgba(255,215,170,.4);
+    pointer-events:none;
+}
 
-    .show { opacity: 1; }
+/* 🎄 Fairy lights */
+.lights{
+    position:fixed;
+    top:10px;
+    width:100%;
+    display:flex;
+    justify-content:space-evenly;
+    pointer-events:none;
+}
+.bulb{
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:red;
+    box-shadow:0 0 15px currentColor;
+    animation:blink 2s infinite alternate;
+}
+.bulb:nth-child(2n){background:gold}
+.bulb:nth-child(3n){background:lime}
+.bulb:nth-child(4n){background:cyan}
 
-    #finalMessage {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 70px;
-      font-family: 'Great Vibes', cursive;
-      color: #ffb6c1;
-      opacity: 0;
-      text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493;
-    }
+/* 🎅 Santa cap */
+.santa-cap{
+    position:absolute;
+    top:-40px;
+    right:-60px;
+    width:90px;
+    transform:rotate(15deg);
+}
 
-    /* Grand entry for Happy Birthday */
-    @keyframes grandEntrance {
-      0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); text-shadow: none; }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); text-shadow: 0 0 40px #ff69b4, 0 0 80px #ff1493; }
-      100% { opacity: 1; transform: translate(-50%, -50%) scale(1); text-shadow: 0 0 25px #ff69b4, 0 0 50px #ff1493; }
-    }
+/* 🎄 Trees */
+.tree{
+    position:fixed;
+    bottom:0;
+    width:180px;
+    height:260px;
+    background:linear-gradient(to top,#0b2d1c,#1f6b45);
+    clip-path:polygon(50% 0%,0% 100%,100% 100%);
+    opacity:.45;
+}
+.tree.small{width:120px;height:180px;opacity:.35}
+.tree.left{left:-40px}
+.tree.right{right:-40px}
+.tree.mid1{left:10%}
+.tree.mid2{right:12%}
 
-    @keyframes glowingPulse {
-      0%, 100% { text-shadow: 0 0 20px #ff69b4, 0 0 40px #ff1493; }
-      50% { text-shadow: 0 0 40px #ff1493, 0 0 80px #ff4da6; }
-    }
+/* 🎁 Gifts */
+.gift{
+    position:fixed;
+    bottom:10px;
+    width:60px;
+    height:60px;
+    background:#c62828;
+    box-shadow:0 0 15px rgba(255,0,0,.4);
+}
+.gift::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to right,transparent 45%,gold 45%,gold 55%,transparent 55%);
+}
+.gift::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(to bottom,transparent 45%,gold 45%,gold 55%,transparent 55%);
+}
+.gift.one{left:45%}
+.gift.two{left:52%;background:#2e7d32}
 
-    .grandShow {
-      opacity: 1 !important;
-      animation: grandEntrance 6s ease forwards, glowingPulse 3s infinite alternate ease-in-out;
-    }
-  </style>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+/* Start Screen */
+#startScreen{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    animation:fadeIn 2s;
+}
+#startScreen h1{
+    font-size:3.4rem;
+    letter-spacing:4px;
+    text-shadow:0 0 40px rgba(255,220,180,.6);
+    position:relative;
+}
+#startBtn{
+    margin-top:30px;
+    padding:15px 55px;
+    font-size:1.2rem;
+    border:1px solid #ffd8a8;
+    background:transparent;
+    color:#ffd8a8;
+    cursor:pointer;
+}
+
+/* Presentation */
+#presentation{
+    display:none;
+    position:absolute;
+    inset:0;
+    padding:60px;
+    text-align:center;
+    transition: opacity 2s; /* fade out effect */
+}
+
+/* Scenes */
+.scene{
+    position:absolute;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+}
+.scene.active{opacity:1}
+
+/* Text */
+.scene h1{
+    font-size:3.6rem;
+    letter-spacing:4px;
+    margin-bottom:20px;
+    opacity:0;
+    transform:translateY(40px);
+    filter:blur(6px);
+    text-shadow:0 0 35px rgba(255,210,160,.4);
+}
+.scene p{
+    font-size:1.6rem;
+    max-width:900px;
+    line-height:1.8;
+    opacity:0;
+    transform:translateY(30px);
+}
+.scene.active h1{animation:revealTitle 1.6s forwards}
+.scene.active p{animation:revealText 1.6s forwards 1s}
+
+/* ❄️ Snow */
+.snow{
+    position:absolute;
+    background:white;
+    border-radius:50%;
+    animation:snowFall linear infinite;
+}
+
+/* ⭐ Hanging stars */
+.star{
+    position:absolute;
+    top:0;
+    width:12px;
+    height:12px;
+    background:gold;
+    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+    animation:twinkle 3s infinite alternate;
+}
+
+/* Animations */
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes revealTitle{to{opacity:1;transform:none;filter:none}}
+@keyframes revealText{to{opacity:.95;transform:none}}
+@keyframes blink{from{opacity:.4}to{opacity:1}}
+@keyframes twinkle{from{opacity:.4}to{opacity:1}}
+@keyframes snowFall{
+    from{transform:translateY(-10vh);opacity:0}
+    to{transform:translateY(110vh);opacity:1}
+}
+</style>
 </head>
+
 <body>
-  <button id="startBtn">🎁 Begin Celebrations</button>
-  <canvas id="fireworks"></canvas>
 
-  <!-- 13 Messages -->
-  <div id="messages">
-    <div class="message left">This day is as special as your voice ✨</div>
-    <div class="message right">Every moment with you feels magical 💫</div>
-    <div class="message left">I still remember those movements that day 🌸</div>
-    <div class="message right">Your kindness lights up the darkest days 🌟</div>
-    <div class="message left">Dreams are brighter when you believe 🌈</div>
-    <div class="message right">Your laughter is the sweetest melody 🎶</div>
-    <div class="message left">You are the Cameo that turned everything</div>
-    <div class="message right">Your smile Always spreads happiness❤️</div>
-    <div class="message left">The stars shine brighter tonight for you 🌌</div>
-    <div class="message right">You are my desire that i desired to desire 💖</div>
-    <div class="message left">Your journey ahead will be golden ✨</div>
-    <div class="message right">Let this world know how great you are </div>
-    <div class="message left">And today, all hearts celebrate YOU 🎂</div>
-  </div>
+<div class="frame"></div>
 
-  <div id="finalMessage">Happy Birthday ❤️</div>
+<!-- Lights -->
+<div class="lights">
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+</div>
 
-  <audio id="bgMusic" src="song.mp3"></audio>
+<!-- Trees -->
+<div class="tree left"></div>
+<div class="tree right"></div>
+<div class="tree small mid1"></div>
+<div class="tree small mid2"></div>
 
-  <script>
-    const startBtn = document.getElementById('startBtn');
-    const canvas = document.getElementById('fireworks');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+<!-- Gifts -->
+<div class="gift one"></div>
+<div class="gift two"></div>
 
-    const messages = document.querySelectorAll('.message');
-    const finalMessage = document.getElementById('finalMessage');
-    const music = document.getElementById('bgMusic');
+<!-- Background Music -->
+<audio id="bgMusic" src="song.mp3" loop></audio>
 
-    // Fireworks particles
-    let particles = [];
-    class Particle {
-      constructor(x, y, color) {
-        this.x = x;
-        this.y = y;
-        this.radius = 2;
-        this.color = color;
-        this.speedX = (Math.random() - 0.5) * 5;
-        this.speedY = (Math.random() - 0.5) * 5;
-        this.alpha = 1;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        this.alpha -= 0.01;
-      }
-      draw() {
-        ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.globalAlpha = 1;
-      }
+<div id="startScreen">
+    <h1>
+        Merry Christmas
+        <img class="santa-cap" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Santa_hat.svg/512px-Santa_hat.svg.png">
+    </h1>
+    <button id="startBtn">Begin</button>
+</div>
+
+<div id="presentation">
+    <div class="scene active">
+        <h1>Merry Christmas 🎄</h1>
+        <p>
+            Christmas is a season of warmth, love, and joy.<br>
+            It’s a time to celebrate family and cherish the moments together.
+        </p>
+    </div>
+
+    <div class="scene">
+        <h1>Dear Mom & Dad</h1>
+        <p>
+            This Christmas reminds me of all the love and care you’ve given me.<br>
+            Your sacrifices, guidance, and gentle hearts make our home a magical place.
+        </p>
+    </div>
+
+    <div class="scene">
+        <h1>Home is Where You Are</h1>
+        <p>
+            With you, every day feels like Christmas.<br>
+            Your love gives me comfort, courage, and the happiest memories.
+        </p>
+    </div>
+
+    <div class="scene">
+        <h1>A Christmas Wish</h1>
+        <p>
+            May your days be filled with peace, your hearts with joy,<br>
+            and our home with laughter and warmth throughout the year.
+        </p>
+    </div>
+
+    <div class="scene">
+        <h1>With All My Love 🤍</h1>
+        <p>
+            Merry Christmas, Mom & Dad<br>
+            <span style="opacity:.8">Susanne & Axel</span><br><br>
+            — Your daughter, <strong>Larissa</strong>
+        </p>
+    </div>
+</div>
+
+<script>
+const startBtn = document.getElementById("startBtn");
+const startScreen = document.getElementById("startScreen");
+const presentation = document.getElementById("presentation");
+const scenes = document.querySelectorAll(".scene");
+
+startBtn.onclick = () => {
+    startScreen.style.display = "none";
+    presentation.style.display = "block";
+
+    const music = document.getElementById("bgMusic");
+    music.play().catch(() => {});
+
+    let current = 0;
+
+    function showNextScene() {
+        if (current < scenes.length - 1) {
+            scenes[current].classList.remove("active");
+            current++;
+            scenes[current].classList.add("active");
+            setTimeout(showNextScene, 12000);
+        } else {
+            // Last scene: show for 12s, then stop music and fade out screen
+            setTimeout(() => {
+                music.pause();
+                music.currentTime = 0;
+                presentation.style.opacity = "0";
+            }, 12000);
+        }
     }
 
-    function createFirework(grand = false) {
-      const x = Math.random() * canvas.width;
-      const y = Math.random() * canvas.height * 0.6;
-      const colors = ["#ff004c", "#ff8400", "#00ffea", "#ffd300", "#ff66c4", "#7fff00"];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const count = grand ? 120 : 40; // more particles in finale
-      for (let i = 0; i < count; i++) {
-        particles.push(new Particle(x, y, color));
-      }
+    setTimeout(showNextScene, 12000);
+
+    // Snow
+    for (let i = 0; i < 180; i++) {
+        const s = document.createElement("div");
+        s.className = "snow";
+        const size = Math.random() * 6 + 2;
+        s.style.width = size + "px";
+        s.style.height = size + "px";
+        s.style.left = Math.random() * 100 + "vw";
+        s.style.animationDuration = Math.random() * 6 + 6 + "s";
+        document.body.appendChild(s);
     }
 
-    function animateFireworks() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach((p, index) => {
-        p.update();
-        p.draw();
-        if (p.alpha <= 0) particles.splice(index, 1);
-      });
-      requestAnimationFrame(animateFireworks);
+    // Stars
+    for (let i = 0; i < 25; i++) {
+        const st = document.createElement("div");
+        st.className = "star";
+        st.style.left = Math.random() * 100 + "vw";
+        st.style.top = Math.random() * 20 + "vh";
+        st.style.animationDelay = Math.random() * 3 + "s";
+        document.body.appendChild(st);
     }
+};
+</script>
 
-    // Show messages one by one
-    function showMessages() {
-      messages.forEach((msg, i) => {
-        setTimeout(() => {
-          msg.classList.add('show');
-          createFirework();
-          setTimeout(() => msg.classList.remove('show'), 4000);
-        }, i * 6000);
-      });
-
-      // Final message after all statements + extra 4s + 1.5s = 5.5s delay
-      setTimeout(() => {
-        finalMessage.classList.add('grandShow');
-
-        // Fireworks finale boost
-        const finaleInterval = setInterval(() => createFirework(true), 1200);
-        setTimeout(() => clearInterval(finaleInterval), 15000); // finale lasts 15s
-      }, messages.length * 6000 + 5500); // +5500ms delay
-    }
-
-    startBtn.addEventListener('click', () => {
-      startBtn.style.display = 'none';
-      music.play();
-      animateFireworks();
-      setInterval(() => createFirework(false), 3000); // normal slow bursts
-      showMessages();
-    });
-  </script>
 </body>
 </html>
+
