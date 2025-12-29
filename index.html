@@ -2,339 +2,224 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Merry Christmas</title>
+<title>A New Chapter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-
-body{
-    font-family:'Poppins',sans-serif;
-    background:radial-gradient(circle at top,#2e3f33,#080b09);
-    color:#fff;
-    overflow:hidden;
-    height:100vh;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: radial-gradient(circle at top, #2b0a3d, #090014);
+  overflow: hidden;
+  color: #fff;
+  font-family: 'Dancing Script', cursive;
 }
 
-/* Vignette */
-body::after{
-    content:"";
-    position:fixed;
-    inset:0;
-    background:radial-gradient(circle,transparent 45%,rgba(0,0,0,.75));
-    pointer-events:none;
+#startOverlay {
+  position: fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.85);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index: 9999;
+  cursor: pointer;
+  font-family: 'Playfair Display', serif;
+  font-size: 5vh;
+  color: #ffd6f5;
+  text-align: center;
+  user-select: none;
 }
 
-/* Frame */
-.frame{
-    position:fixed;
-    inset:20px;
-    border:1px solid rgba(255,215,170,.4);
-    pointer-events:none;
+body::before {
+  content: "";
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(255,182,193,0.15), transparent 60%);
+  animation: glow 8s infinite alternate;
+  z-index: 0;
 }
 
-/* 🎄 Fairy lights */
-.lights{
-    position:fixed;
-    top:10px;
-    width:100%;
-    display:flex;
-    justify-content:space-evenly;
-    pointer-events:none;
-}
-.bulb{
-    width:14px;
-    height:14px;
-    border-radius:50%;
-    background:red;
-    box-shadow:0 0 15px currentColor;
-    animation:blink 2s infinite alternate;
-}
-.bulb:nth-child(2n){background:gold}
-.bulb:nth-child(3n){background:lime}
-.bulb:nth-child(4n){background:cyan}
-
-/* 🎅 Santa cap */
-.santa-cap{
-    position:absolute;
-    top:-40px;
-    right:-60px;
-    width:90px;
-    transform:rotate(15deg);
+@keyframes glow {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
 }
 
-/* 🎄 Trees */
-.tree{
-    position:fixed;
-    bottom:0;
-    width:180px;
-    height:260px;
-    background:linear-gradient(to top,#0b2d1c,#1f6b45);
-    clip-path:polygon(50% 0%,0% 100%,100% 100%);
-    opacity:.45;
-}
-.tree.small{width:120px;height:180px;opacity:.35}
-.tree.left{left:-40px}
-.tree.right{right:-40px}
-.tree.mid1{left:10%}
-.tree.mid2{right:12%}
-
-/* 🎁 Gifts */
-.gift{
-    position:fixed;
-    bottom:10px;
-    width:60px;
-    height:60px;
-    background:#c62828;
-    box-shadow:0 0 15px rgba(255,0,0,.4);
-}
-.gift::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to right,transparent 45%,gold 45%,gold 55%,transparent 55%);
-}
-.gift::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(to bottom,transparent 45%,gold 45%,gold 55%,transparent 55%);
-}
-.gift.one{left:45%}
-.gift.two{left:52%;background:#2e7d32}
-
-/* Start Screen */
-#startScreen{
-    position:absolute;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    animation:fadeIn 2s;
-}
-#startScreen h1{
-    font-size:3.4rem;
-    letter-spacing:4px;
-    text-shadow:0 0 40px rgba(255,220,180,.6);
-    position:relative;
-}
-#startBtn{
-    margin-top:30px;
-    padding:15px 55px;
-    font-size:1.2rem;
-    border:1px solid #ffd8a8;
-    background:transparent;
-    color:#ffd8a8;
-    cursor:pointer;
+.fullscreen-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
-/* Presentation */
-#presentation{
-    display:none;
-    position:absolute;
-    inset:0;
-    padding:60px;
-    text-align:center;
-    transition: opacity 2s; /* fade out effect */
+.salutation {
+  font-family: 'Great Vibes', cursive;
+  font-size: 46px;
+  color: #ffd1ec;
+  text-shadow: 0 0 20px rgba(255,170,220,0.6);
+  opacity: 0;
 }
 
-/* Scenes */
-.scene{
-    position:absolute;
-    inset:0;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    opacity:0;
-}
-.scene.active{opacity:1}
-
-/* Text */
-.scene h1{
-    font-size:3.6rem;
-    letter-spacing:4px;
-    margin-bottom:20px;
-    opacity:0;
-    transform:translateY(40px);
-    filter:blur(6px);
-    text-shadow:0 0 35px rgba(255,210,160,.4);
-}
-.scene p{
-    font-size:1.6rem;
-    max-width:900px;
-    line-height:1.8;
-    opacity:0;
-    transform:translateY(30px);
-}
-.scene.active h1{animation:revealTitle 1.6s forwards}
-.scene.active p{animation:revealText 1.6s forwards 1s}
-
-/* ❄️ Snow */
-.snow{
-    position:absolute;
-    background:white;
-    border-radius:50%;
-    animation:snowFall linear infinite;
+.text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 27px;
+  line-height: 1.7;
+  color: #ffe6f2;
+  text-shadow: 0 0 15px rgba(255,120,180,0.4);
+  margin-top: 20px;
+  flex: 1;
+  overflow: hidden;
 }
 
-/* ⭐ Hanging stars */
-.star{
-    position:absolute;
-    top:0;
-    width:12px;
-    height:12px;
-    background:gold;
-    clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-    animation:twinkle 3s infinite alternate;
+.bottom-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* Animations */
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes revealTitle{to{opacity:1;transform:none;filter:none}}
-@keyframes revealText{to{opacity:.95;transform:none}}
-@keyframes blink{from{opacity:.4}to{opacity:1}}
-@keyframes twinkle{from{opacity:.4}to{opacity:1}}
-@keyframes snowFall{
-    from{transform:translateY(-10vh);opacity:0}
-    to{transform:translateY(110vh);opacity:1}
+.love {
+  font-family: 'Great Vibes', cursive;
+  font-size: 48px;
+  color: #ffb6d9;
+  text-shadow: 0 0 30px rgba(255,160,210,0.9);
+  opacity: 0;
+}
+
+.newyear {
+  font-family: 'Playfair Display', serif;
+  font-size: 40px;
+  color: #ffd6f5;
+  text-shadow: 0 0 35px rgba(255,190,230,1);
+  opacity: 0;
+}
+
+.fade-in {
+  animation: fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.heart {
+  position: absolute;
+  bottom: -20px;
+  font-size: 18px;
+  color: rgba(255,150,200,0.5);
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  from { transform: translateY(0); opacity: 0; }
+  20% { opacity: 1; }
+  to { transform: translateY(-120vh); opacity: 0; }
+}
+
+.sparkle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 50%;
+  animation: sparkle 6s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+  from { transform: translateY(0); opacity: 0; }
+  30% { opacity: 1; }
+  to { transform: translateY(-100vh); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<div class="frame"></div>
+<div id="startOverlay">Click Here to Begin 💖</div>
 
-<!-- Lights -->
-<div class="lights">
-    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
-    <div class="bulb"></div><div class="bulb"></div><div class="bulb"></div>
+<div class="fullscreen-container" id="mainContent">
+  <div class="salutation" id="salutation">Dear Chinni,</div>
+  <div class="text" id="text"></div>
+  <div class="bottom-text">
+    <div class="love" id="love">Love you Chinni</div>
+    <div class="newyear" id="newyear">Happy New Year ✨</div>
+  </div>
 </div>
 
-<!-- Trees -->
-<div class="tree left"></div>
-<div class="tree right"></div>
-<div class="tree small mid1"></div>
-<div class="tree small mid2"></div>
-
-<!-- Gifts -->
-<div class="gift one"></div>
-<div class="gift two"></div>
-
-<!-- Background Music -->
-<audio id="bgMusic" src="song.mp3" loop></audio>
-
-<div id="startScreen">
-    <h1>
-        Merry Christmas
-        <img class="santa-cap" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Santa_hat.svg/512px-Santa_hat.svg.png">
-    </h1>
-    <button id="startBtn">Begin</button>
-</div>
-
-<div id="presentation">
-    <div class="scene active">
-        <h1>Merry Christmas 🎄</h1>
-        <p>
-            Christmas is a season of warmth, love, and joy.<br>
-            It’s a time to celebrate family and cherish the moments together.
-        </p>
-    </div>
-
-    <div class="scene">
-        <h1>Dear Mom & Dad</h1>
-        <p>
-            This Christmas reminds me of all the love and care you’ve given me.<br>
-            Your sacrifices, guidance, and gentle hearts make our home a magical place.
-        </p>
-    </div>
-
-    <div class="scene">
-        <h1>Home is Where You Are</h1>
-        <p>
-            With you, every day feels like Christmas.<br>
-            Your love gives me comfort, courage, and the happiest memories.
-        </p>
-    </div>
-
-    <div class="scene">
-        <h1>A Christmas Wish</h1>
-        <p>
-            May your days be filled with peace, your hearts with joy,<br>
-            and our home with laughter and warmth throughout the year.
-        </p>
-    </div>
-
-    <div class="scene">
-        <h1>With All My Love 🤍</h1>
-        <p>
-            Merry Christmas, Mom & Dad<br>
-            <span style="opacity:.8">Susanne & Axel</span><br><br>
-            — Your daughter, <strong>Larissa</strong>
-        </p>
-    </div>
-</div>
+<audio id="bgMusic" src="1000.mp3" loop></audio>
 
 <script>
-const startBtn = document.getElementById("startBtn");
-const startScreen = document.getElementById("startScreen");
-const presentation = document.getElementById("presentation");
-const scenes = document.querySelectorAll(".scene");
+const paragraph =
+"It has been a great year for me to have you in my life as a special person.I don't know if it's a mistake to turn a friendship into relationship , if it works then it would become a beautiful bond. Apart from disturbances in our relationship I enjoyed every moment with you chinni.This 2025 is one of the best years in my life because of you . Sometimes I felt like what if I didn't propose you.? May be we will continue with same college vibes. Don't know why  I deeply attached to you, I cannot forget you . I tried every possible way to go away from you but I cannot because you are inside me .  I loose self respect, ego  and all just to talk to you after the fight. Not only because of love but also for  the friendship. I wish we will leave these fights and disturbances by this year.  No matter what happens between us, I don't Want to become a stranger to you. Let us begin this new year with a new chapter of love. ";
 
-startBtn.onclick = () => {
-    startScreen.style.display = "none";
-    presentation.style.display = "block";
+const textDiv = document.getElementById("text");
+const love = document.getElementById("love");
+const newyear = document.getElementById("newyear");
+const mainContent = document.getElementById("mainContent");
+const startOverlay = document.getElementById("startOverlay");
+const bgMusic = document.getElementById("bgMusic");
+const salutation = document.getElementById("salutation");
 
-    const music = document.getElementById("bgMusic");
-    music.play().catch(() => {});
-
-    let current = 0;
-
-    function showNextScene() {
-        if (current < scenes.length - 1) {
-            scenes[current].classList.remove("active");
-            current++;
-            scenes[current].classList.add("active");
-            setTimeout(showNextScene, 12000);
-        } else {
-            // Last scene: show for 12s, then stop music and fade out screen
-            setTimeout(() => {
-                music.pause();
-                music.currentTime = 0;
-                presentation.style.opacity = "0";
-            }, 12000);
-        }
+function typeWriter() {
+  let index = 0;
+  function typing() {
+    if(index < paragraph.length) {
+      textDiv.innerHTML += paragraph.charAt(index);
+      index++;
+      setTimeout(typing, 110); // slowed to ~1 minute total
+    } else {
+      setTimeout(()=>love.classList.add("fade-in"), 600);
+      setTimeout(()=>newyear.classList.add("fade-in"), 1600);
     }
+  }
+  typing();
+}
 
-    setTimeout(showNextScene, 12000);
+function startPresentation() {
+  startOverlay.style.display = "none";
+  mainContent.style.opacity = 1;
 
-    // Snow
-    for (let i = 0; i < 180; i++) {
-        const s = document.createElement("div");
-        s.className = "snow";
-        const size = Math.random() * 6 + 2;
-        s.style.width = size + "px";
-        s.style.height = size + "px";
-        s.style.left = Math.random() * 100 + "vw";
-        s.style.animationDuration = Math.random() * 6 + 6 + "s";
-        document.body.appendChild(s);
-    }
+  bgMusic.play();
 
-    // Stars
-    for (let i = 0; i < 25; i++) {
-        const st = document.createElement("div");
-        st.className = "star";
-        st.style.left = Math.random() * 100 + "vw";
-        st.style.top = Math.random() * 20 + "vh";
-        st.style.animationDelay = Math.random() * 3 + "s";
-        document.body.appendChild(st);
-    }
-};
+  setTimeout(()=>{
+    salutation.classList.add("fade-in");
+    typeWriter();
+  }, 2000);
+
+  for (let i = 0; i < 30; i++) {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerHTML = "❤";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDelay = Math.random() * 10 + "s";
+    heart.style.fontSize = (14 + Math.random() * 12) + "px";
+    document.body.appendChild(heart);
+  }
+
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement("div");
+    s.className = "sparkle";
+    s.style.left = Math.random() * 100 + "vw";
+    s.style.animationDelay = Math.random() * 6 + "s";
+    document.body.appendChild(s);
+  }
+}
+
+startOverlay.addEventListener("click", startPresentation);
 </script>
 
 </body>
 </html>
-
