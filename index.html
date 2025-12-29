@@ -11,20 +11,18 @@
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   background: radial-gradient(circle at top, #2b0a3d, #090014);
-  overflow: hidden;
   color: #fff;
   font-family: 'Dancing Script', cursive;
+  overflow-x: hidden;
 }
 
+/* START OVERLAY */
 #startOverlay {
   position: fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset: 0;
   background: rgba(0,0,0,0.85);
   display:flex;
   justify-content:center;
@@ -32,15 +30,16 @@ html, body {
   z-index: 9999;
   cursor: pointer;
   font-family: 'Playfair Display', serif;
-  font-size: 5vh;
+  font-size: clamp(22px, 5vw, 36px);
   color: #ffd6f5;
   text-align: center;
   user-select: none;
 }
 
+/* GLOW BACKGROUND */
 body::before {
   content: "";
-  position: absolute;
+  position: fixed;
   width: 140%;
   height: 140%;
   background: radial-gradient(circle, rgba(255,182,193,0.15), transparent 60%);
@@ -53,66 +52,69 @@ body::before {
   to { transform: scale(1.1); }
 }
 
+/* MAIN CONTAINER */
 .fullscreen-container {
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
-  padding: 20px;
+  padding: 1.5rem 1.2rem 3rem; /* bottom padding saves last line */
   box-sizing: border-box;
   z-index: 1;
   opacity: 0;
   transition: opacity 0.5s;
 }
 
+/* SALUTATION */
 .salutation {
   font-family: 'Great Vibes', cursive;
-  font-size: 46px;
+  font-size: clamp(34px, 6vw, 48px);
   color: #ffd1ec;
   text-shadow: 0 0 20px rgba(255,170,220,0.6);
   opacity: 0;
 }
 
+/* PARAGRAPH */
 .text {
+  flex-grow: 1;
+  margin-top: 1rem;
   font-family: 'Dancing Script', cursive;
-  font-size: clamp(18px, 1.1rem + 0.6vw, 24px);
-  line-height: 1.7;
+  font-size: clamp(19px, 4.5vw, 26px); /* 🔑 FIXED */
+  line-height: 1.65;
   color: #ffe6f2;
   text-shadow: 0 0 15px rgba(255,120,180,0.4);
-  margin-top: 20px;
-  overflow-y: auto;       
-  padding-right: 6px;
-  -webkit-overflow-scrolling: touch;
-}
-  .text::-webkit-scrollbar {
-  width: 0;
+  overflow-wrap: break-word;
 }
 
-
+/* BOTTOM TEXT */
 .bottom-text {
-  margin-top: 19px;
+  margin-top: 0.8rem; /* reduced gap */
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
+/* LOVE */
 .love {
   font-family: 'Great Vibes', cursive;
-  font-size: 48px;
+  font-size: clamp(32px, 6vw, 48px);
   color: #ffb6d9;
   text-shadow: 0 0 30px rgba(255,160,210,0.9);
   opacity: 0;
 }
 
+/* NEW YEAR */
 .newyear {
+  margin-top: 0.2rem;
   font-family: 'Playfair Display', serif;
-  font-size: 40px;
+  font-size: clamp(22px, 5vw, 38px);
   color: #ffd6f5;
   text-shadow: 0 0 35px rgba(255,190,230,1);
   opacity: 0;
 }
 
+/* FADE */
 .fade-in {
   animation: fadeIn 2s ease forwards;
 }
@@ -121,8 +123,9 @@ body::before {
   to { opacity: 1; }
 }
 
+/* FLOATING HEARTS */
 .heart {
-  position: absolute;
+  position: fixed;
   bottom: -20px;
   font-size: 18px;
   color: rgba(255,150,200,0.5);
@@ -135,8 +138,9 @@ body::before {
   to { transform: translateY(-120vh); opacity: 0; }
 }
 
+/* SPARKLES */
 .sparkle {
-  position: absolute;
+  position: fixed;
   width: 3px;
   height: 3px;
   background: rgba(255,255,255,0.8);
@@ -159,6 +163,7 @@ body::before {
 <div class="fullscreen-container" id="mainContent">
   <div class="salutation" id="salutation">Dear Chinni,</div>
   <div class="text" id="text"></div>
+
   <div class="bottom-text">
     <div class="love" id="love">Love you Chinni</div>
     <div class="newyear" id="newyear">Happy New Year ✨</div>
@@ -169,7 +174,7 @@ body::before {
 
 <script>
 const paragraph =
-"It has been a great year for me to have you in my life as a special person.I don't know if it's a mistake to turn a friendship into relationship , if it works then it would become a beautiful bond. Apart from disturbances in our relationship I enjoyed every moment with you chinni.This 2025 is one of the best years in my life because of you . Sometimes I felt like what if I didn't propose you.? May be we will continue with same college vibes. Don't know why  I deeply attached to you, I cannot forget you . I tried every possible way to go away from you but I cannot because you are inside me .  I loose self respect, ego  and all just to talk to you after the fight. Not only because of love but also for  the friendship. I wish we will leave these fights and disturbances by this year.  No matter what happens between us, I don't Want to become a stranger to you. Let us begin this new year with a new chapter of love. ";
+"It has been a great year for me to have you in my life as a special person. I don't know if it's a mistake to turn a friendship into relationship, if it works then it would become a beautiful bond. Apart from disturbances in our relationship I enjoyed every moment with you chinni. This 2025 is one of the best years in my life because of you. Sometimes I felt like what if I didn't propose you? Maybe we would continue with the same college vibes. Don't know why I deeply attached to you, I cannot forget you. I tried every possible way to go away from you but I cannot because you are inside me. I lose self respect, ego and all just to talk to you after the fight — not only because of love but also for the friendship. I wish we will leave these fights and disturbances by this year. No matter what happens between us, I don't want to become a stranger to you. Let us begin this new year with a new chapter of love.";
 
 const textDiv = document.getElementById("text");
 const love = document.getElementById("love");
@@ -182,13 +187,13 @@ const salutation = document.getElementById("salutation");
 function typeWriter() {
   let index = 0;
   function typing() {
-    if(index < paragraph.length) {
+    if (index < paragraph.length) {
       textDiv.innerHTML += paragraph.charAt(index);
       index++;
-      setTimeout(typing, 110); // slowed to ~1 minute total
+      setTimeout(typing, 110);
     } else {
-      setTimeout(()=>love.classList.add("fade-in"), 600);
-      setTimeout(()=>newyear.classList.add("fade-in"), 1600);
+      setTimeout(() => love.classList.add("fade-in"), 600);
+      setTimeout(() => newyear.classList.add("fade-in"), 1600);
     }
   }
   typing();
@@ -200,7 +205,7 @@ function startPresentation() {
 
   bgMusic.play();
 
-  setTimeout(()=>{
+  setTimeout(() => {
     salutation.classList.add("fade-in");
     typeWriter();
   }, 2000);
