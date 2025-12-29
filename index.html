@@ -76,14 +76,20 @@ body::before {
 
 .text {
   font-family: 'Dancing Script', cursive;
-  font-size: clamp(18px, 2.5vmin, 27px);
+  font-size: clamp(19px, 1.1rem + 0.6vw, 24px);
   line-height: 1.7;
   color: #ffe6f2;
   text-shadow: 0 0 15px rgba(255,120,180,0.4);
   margin-top: 20px;
   flex: 1;
-  overflow: hidden;
+  overflow-y: auto;       
+  padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
 }
+  .text::-webkit-scrollbar {
+  width: 0;
+}
+
 
 .bottom-text {
   display: flex;
